@@ -1,35 +1,30 @@
 <template>
   <div class="container">
     <div>
-      <logo />
-      <h1 class="title">
-        bloglog
-      </h1>
-      <h2 class="subtitle">
-        My fantabulous Nuxt.js project
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      {{ items }}
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import axios from 'axios'
 
 export default {
-  components: {
-    Logo
+  data() {
+    return {
+      items: []
+    }
+  },
+  async asyncData() {
+    const { data } = await axios.get(
+      'https://bloglog.microcms.io/api/v1/blogs',
+      {
+        headers: { 'X-API-KEY': process.env.API_KEY }
+      }
+    )
+    return {
+      items: data.contents
+    }
   }
 }
 </script>
